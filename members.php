@@ -118,13 +118,7 @@ Sports Urheiluseuran asiakasrekisteri
             unset($_SESSION['club_id']); 
           //  echo "jees2";               
         }
-
-        // if (isset($_SESSION['message'])) {
-        //     unset($_SESSION['message']); 
-        //     echo "jees3";               
-        // }
-        
-        
+    
         echo callFunctions("fetchMembers", "");
     } 
 ?>

@@ -28,7 +28,12 @@ Sports Urheiluseuran asiakasrekisteri
       
             <fieldset>
                 <legend>Seuran jäsenlista</legend>
-           
+                <h2>
+                <?PHP                    
+                    $club_id = getClubId();
+                    echo callFunctions("fetchClubNameById", $club_id);
+                ?>
+                </h2>
            </fieldset>
            <br>
            
@@ -66,15 +71,24 @@ Sports Urheiluseuran asiakasrekisteri
 </html>
 
 <?php
-    
+    function getClubId() {
+        $club_id = -1;
+        if(isset($_GET['ind'])) {
+            $ind = $_GET['ind'];
+            $club_id = getClubIdByIndFromSession($ind);
+        }
+        else {
+            $club_id = getClubIdFromSession();
+        }
+        return $club_id;
+    }
+  
+    $club_id = getClubId();
+
     if (isset($_SESSION['club_identifiers'])) {
         unset($_SESSION['club_identifiers']);              
     }
-    $club_id = -1;
-    if (isset($_SESSION['club_id'])) {
-        $club_id = $_SESSION['club_id'];               
-    }  
-    
+
     echo callFunctions("fetchMemberList", $club_id);
 
 ?>

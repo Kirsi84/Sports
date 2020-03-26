@@ -38,8 +38,16 @@
 
                 <label for  ="clubname" class="lbTitle">Seura:</label>
                 <?php 
-                    $ind = $_GET['ind'];
-                    callFunctions("fetchClubById", $ind); //this is index of the table, not identifier
+
+                    if(isset($_GET['ind'])) {
+                        $ind = $_GET['ind'];  
+                        $club_id = getClubIdByIndFromSession($ind);
+                    }
+                    else {
+                        $club_id = getClubIdFromSession();
+                    }
+
+                    callFunctions("fetchClubById", $club_id); 
                 ?>
                                               
                 <br><br>

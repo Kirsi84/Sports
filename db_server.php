@@ -84,6 +84,11 @@ function callFunctions($mode, $param)
                 fetchClubById($con, $param);
                 break;
 
+            case "fetchClubNameById":
+                fetchClubNameById($con, $param);
+               // echo "testi clubin nimi";
+                break;
+            
             case "fetchMemberList":
                 fetchMemberList($con, $param);
                 break;
@@ -119,8 +124,34 @@ function callFunctions($mode, $param)
     }
 }
 
+//***** club id : getIdByIndFromSession
+function getClubIdByIndFromSession ($ind) {
+    $club_id = -1;
+    if (isset($_SESSION['club_identifiers'])) {     
+        $arr_identifiers = $_SESSION['club_identifiers'];
+        $club_id = $arr_identifiers[$ind];
 
-function fetchClubById( $con, $ind)
+        if (isset($_SESSION['club_id'])) {
+            unset($_SESSION['club_id']); // todo:
+        }
+        $_SESSION['club_id'] = $club_id; // set session data
+     
+    }
+    return $club_id;
+}
+
+function getClubIdFromSession () {
+    $club_id = -1;
+   
+    if (isset($_SESSION['club_id'])) {
+        $club_id = $_SESSION['club_id'];               
+    }    
+    return $club_id;
+}
+
+
+//function fetchClubById($con, $ind)
+function fetchClubById($con, $id)
 {              
     //****  unset session variable */
     // if (isset($_SESSION['club_id'])) {
@@ -131,13 +162,8 @@ function fetchClubById( $con, $ind)
         session_start();
     }
   
-    $id = -1;
-   
-    if (isset($_SESSION['club_identifiers'])) {     
-        $arr_identifiers = $_SESSION['club_identifiers'];
-        $id = $arr_identifiers[$ind];
-    }
-   
+   // $id = getClubIdByIndFromSession($ind);
+      
     $sql = "SELECT c.id, c.name, c.description, c.updated, c.updatedBy FROM club c where c.id = $id";
 
     //   echo $sql ;
@@ -177,12 +203,53 @@ function fetchClubById( $con, $ind)
     }
 }
 
+function fetchClubNameById($con, $id)
+{              
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+  
+   // $id = getClubIdByIndFromSession($ind);
+      
+    $sql = "SELECT c.id, c.name FROM club c where c.id = $id";
+
+    //   echo $sql ;
+    //  exit;
+
+    $result = mysqli_query($con, $sql);
+    
+    if (mysqli_num_rows($result) > 0)
+    {
+            //******also making session data ****//
+       
+            while($row = mysqli_fetch_assoc($result)) 
+            {   
+                              
+                $name        = $row['name'];
+                $clubid_session =  $row['id'];              
+
+                echo $name; //name of the club
+            }
+            
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();              
+            }
+            $_SESSION['club_id'] = $clubid_session; // set session data
+         
+          //  echo "kohta C: " .  $_SESSION['club_id'];
+ 
+    }
+    else
+    {
+        echo "Tietoja ei löydy";
+    }
+}
+
 function fetchClubs( $con, $param)
 {   
     //****  unset session variable */
     if (isset($_SESSION['club_identifiers'])) {
-        unset($_SESSION['club_identifiers']);
-      
+        unset($_SESSION['club_identifiers']);      
     }
 
     $sql = "SELECT c.id, c.name, c.description, c.updated, c.updatedBy FROM club c order by c.name";
@@ -207,22 +274,25 @@ function fetchClubs( $con, $param)
                 $updatedBy = $row["updatedBy"]; 
                 $updated = $row["updated"]; 
             
+                // echo "<tr onclick=\"setSelectedRow(this)\"><td>$name</td><td>$description</td><td>$updatedBy</td><td>$updated</td>" .
+                // "<td hidden name=\"ind\">$ind</td><td><a href=\"createMember.php?ind=$ind\">Lisää jäsen</a></td></tr>";
+
                 echo "<tr onclick=\"setSelectedRow(this)\"><td>$name</td><td>$description</td><td>$updatedBy</td><td>$updated</td>" .
-                "<td hidden name=\"ind\">$ind</td><td><a href=\"createMember.php?ind=$ind\">Lisää jäsen</a></td></tr>";
+                "<td hidden name=\"ind\">$ind</td><td>" . 
+                "<a href=\"createMember.php?ind=$ind\">Lisää jäsen</a>" . " " .
+                "<a href=\"memberlist.php?ind=$ind\">Jäsenlistaus</a>" .
+                "</td></tr>";
 
                 $arr_session[$ind] =  $row['id'];
                 $ind         = $ind + 1;
             }
             echo "</table>";
-         
             
-           
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
             $_SESSION['club_identifiers'] = $arr_session; // set session variable
-
-           
+       
         //    echo "<pre>";     
         //    echo print_r ($_SESSION['club_identifiers']);
         //    echo "</pre>";
@@ -254,7 +324,6 @@ function fetchClubs( $con, $param)
 
 function fetchMemberList( $con, $club_id)
 {
-   
  
     $sql =  
   
@@ -271,17 +340,20 @@ function fetchMemberList( $con, $club_id)
     
     if (mysqli_num_rows($result) > 0)
     {
-        echo "<table id=\"myTableId\" ><tr><th>Seura</th><th>Sukunimi</th><th>Etunimi</th><th>Päivittäjä</th><th>Päivitysaika</th></tr>";
+       // echo "<table id=\"myTableId\" ><tr><th>Seura</th><th>Sukunimi</th><th>Etunimi</th><th>Päivittäjä</th><th>Päivitysaika</th></tr>";
+        echo "<table id=\"myTableId\" ><tr><th>Sukunimi</th><th>Etunimi</th><th>Päivittäjä</th><th>Päivitysaika</th></tr>";
 
         while($row = mysqli_fetch_assoc($result)) 
         {
-            $clubname = $row['clubname'];
+          //  $clubname = $row['clubname'];
             $lastname = $row['lastname'];
             $firstname = $row['firstname'];
             $updatedBy = $row["updatedBy"]; 
             $updated = $row["updated"]; 
          
-            echo "<tr><td>$clubname</td><td>$lastname</td><td>$firstname</td><td>$updatedBy</td><td>$updated</td></tr>";
+           // echo "<tr><td>$clubname</td><td>$lastname</td><td>$firstname</td><td>$updatedBy</td><td>$updated</td></tr>";
+            echo "<tr><td>$lastname</td><td>$firstname</td><td>$updatedBy</td><td>$updated</td></tr>";
+  
         }
         echo "</table>";
     }
@@ -345,8 +417,6 @@ function fetchMembers( $con)
     } 
 }
 
-
-
 function createMember($con)
 {
     try {
@@ -363,10 +433,9 @@ function createMember($con)
         if (isset($_SESSION['club_id']))  {     
             $club_id = $_SESSION['club_id'] ; //clubid selected by user in clubs form
 
-           // echo "kohta A: " . $club_id;
         }
 
-        echo "jees3: " . $club_id;
+        echo "jees create member3: " . $club_id;
         
         $firstname         = trim(strip_tags( $_POST['firstname']));
         $firstname         = mysqli_real_escape_string($con,  $firstname );
@@ -391,38 +460,25 @@ function createMember($con)
                     '$club_id',
                     '$updatedBy')";
 
-        // echo $sql ;
-        // exit;
+        //  echo $sql ;
+        //  exit;
     
         if (mysqli_query($con, $sql))
         {
-            // $Message = "Seuran jäsen lisätty onnistuneesti tietokantaan!";
-            // header("Location: members.php?Message=".$Message);
-
-            // set session variable
-           // $_SESSION['message'] = "Seuran jäsen lisätty onnistuneesti tietokantaan!"; 
             header("Location: memberlist.php");
         }
         else
         {
             // todo: $error = "Virhe tietojen päivityksessä: " . mysqli_error($con);
-
             $Message = "Virhe tietojen päivityksessä: seuran jäsenen lisääminen";
             header("Location: error.php?Message=".$Message);
-
         } 
     }
     finally {
-        //****  unset session variable */
-        // if (isset($_SESSION['club_id'])) {
-        //     unset($_SESSION['club_id']);
-        //     echo "kohta B: unset <br> "; 
-        // }
-       // echo "kohta B: unset <br> "; 
+      
 
     } 
 }
-
 
 function createClub($con)
 {
@@ -467,23 +523,23 @@ function createClub($con)
 ?>
 
 <script>
-       // When the user scrolls the page, execute myFunction
-            window.onscroll = function() {myFunction()};
+    // When the user scrolls the page, execute myFunction
+    window.onscroll = function() {myFunction()};
 
-            // Get the navbar
-            var navbar = document.getElementById("navbar");
+    // Get the navbar
+    var navbar = document.getElementById("navbar");
 
-            // Get the offset position of the navbar
-            var sticky = navbar.offsetTop;
+    // Get the offset position of the navbar
+    var sticky = navbar.offsetTop;
 
-            // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-            function myFunction()
-            {
-                if (window.pageYOffset >= sticky) {
-                    navbar.classList.add("sticky")
-                } else {
-                    navbar.classList.remove("sticky");
-                }
-            }
+    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    function myFunction()
+    {
+        if (window.pageYOffset >= sticky) {
+            navbar.classList.add("sticky")
+        } else {
+            navbar.classList.remove("sticky");
+        }
+    }
 
 </script>
