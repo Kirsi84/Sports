@@ -1,0 +1,148 @@
+html{
+    background-color: mintcream;
+}
+
+#lomake {
+    max-width:600px;
+   
+    
+} 
+fieldset {
+    /* background-color: gainsboro; */
+    background-color: lightblue;
+    padding-top: 20px;    
+    padding-bottom: 20px;
+       
+}
+
+legend {
+    font-size: xx-large;
+    
+
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    padding: 15px;
+   
+    text-align: left;
+    padding: 8px;
+    padding-left: 1px;
+}
+tr:nth-child(even) {
+    /* background-color: #dddddd; */
+    background-color: lightblue;
+   
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+select {
+ 
+    height: 26px;
+    margin-right: 25px;
+}
+
+/* classes */
+
+
+.lbTitle {
+    width:150px;
+    display: inline-block;
+    height: 25px;
+}
+
+.sButton {
+    /* margin-left: 25; */
+    margin-right: 25px;
+    height: 25px;
+    width: 150px;
+    background-color: peachpuff;
+    border-style: groove;  
+    text-align: center; 
+    cursor: pointer;
+    border: 1px solid #2d6898;
+}
+
+.sButton:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.txtBox {
+    width:400px ;
+    display: inline-block;
+    height: 25px;
+}
+
+textarea{
+    width:400px ;
+    display: inline-block;
+    height: 250;
+
+}
+
+/* #bSearch {
+    margin-left: 10px;
+    
+} */
+
+#inputName{
+    margin-right: 10px;
+}
+
+
+/* Style the navbar */
+#navbar {
+  overflow: hidden;
+  /* background-color: mediumblue; */
+  background-color: mintcream;}
+
+/* Navbar links */
+#navbar a {
+  float: left;
+  display: block;
+  /* color: #f2f2f2; */
+  color: black; 
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  border-style: solid;
+  border-width: 1px;border-color: black;
+
+}
+
+/* Page content */
+.content {
+  padding: 16px;
+}
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 60px;
+}
+
+/* #userData {
+    padding-left:800px;
+    padding-right:10;
+} */
+
+/* #usertxt2 { */
+    /* padding-left:800px; */
+    /* padding-right:10; */
+    /* margin-left: 10px; */
+    
+/* } */
