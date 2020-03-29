@@ -1,13 +1,10 @@
 <?php
-   
-    require('db_server.php'); // here
-    //$_POST['virheet']['kuvaus'] = "Kuvaus on jo olemassa";
+     require('db_server.php'); 
 ?>
 
 <!DOCTYPE html>
-<!--
 
--->
+<!-- Create Club -->
 
 <html>
     <head>
@@ -40,6 +37,8 @@
                 <input type="submit" name="button"  class="sButton" value="Tallenna"> 
                
            </fieldset>
+          
+           <br><a href="index.php">Paluu</a>
            
            <br>
            

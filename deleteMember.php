@@ -1,5 +1,5 @@
 <?php
-    require('db_server.php'); // here
+    require('db_server.php'); 
 ?>
 
 <!DOCTYPE html>
@@ -43,12 +43,19 @@
 
                 <br><br>
             
-                <input type="submit" name="deleteButton"  class="sButton" value="Poista tiedot"> 
+                <input type="submit" name="deleteButton" id="deleteButton" class="sButton" value="Poista tiedot">  
            
            </fieldset>
-            <br>
+           <br>
         
        </form>
+
+       <script type="text/javascript">
+            function disableDeleteButton() {              
+                document.getElementById("deleteButton").disabled = true;
+            }
+          
+        </script>
       
     </body>
   
@@ -61,8 +68,10 @@
     {    
         $member_id = getMemberIdFromSession();
         echo  callFunctions("deleteMember",  $member_id);
+        echo '<script type="text/javascript">'.
+              'disableDeleteButton()' .
+              '</script>';
     }
-
-    echo "<br><br><a href=\"memberlist.php\">Paluu</a>";
+    echo "<br><a href=\"memberlist.php\">Paluu</a>";
 
 ?>

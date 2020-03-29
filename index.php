@@ -3,9 +3,7 @@
 ?>
 
 <!DOCTYPE html>
-<!--
-Sports Urheiluseuran asiakasrekisteri
--->
+<!-- Sports Urheiluseuran asiakasrekisteri -->
 
 <html>
     <head>
@@ -23,8 +21,7 @@ Sports Urheiluseuran asiakasrekisteri
     <body>
 
        <br>
-        
-        <!-- <form name="myForm" onsubmit="return validateForm()" method="post"> -->
+       
         <form action="createMember.php" method="post">
       
             <fieldset>
@@ -32,59 +29,38 @@ Sports Urheiluseuran asiakasrekisteri
             </fieldset>
             <br>
 
-            <?php 
-                // if (isset($_SESSION['message']))  {     
-                //     echo $_SESSION['message'];
-                // }
-            ?>
-
-           <p id="information"></p>
+           <!-- <p id="information"></p> -->
                                   
            <?php callFunctions("fetchClubs", "list"); ?>
        </form>
 
        <script>
-
-      
+   
             //****** */ When the user scrolls the page, execute myFunction
-            window.onscroll = function() {myFunction()};
+            // window.onscroll = function() {pageScrolling()};
 
-            // Get the navbar
-            var navbar = document.getElementById("navbar");
+            // // Get the navbar
+            // var navbar = document.getElementById("navbar");
 
-            // Get the offset position of the navbar
-            var sticky = navbar.offsetTop;
+            // // Get the offset position of the navbar
+            // var sticky = navbar.offsetTop;
 
-            // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-            function myFunction()
-            {
-                if (window.pageYOffset >= sticky) {
-                    navbar.classList.add("sticky")
-                } else {
-                    navbar.classList.remove("sticky");
-                }
-            }
+            // // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+            // function pageScrolling()
+            // {
+            //     if (window.pageYOffset >= sticky) {
+            //         navbar.classList.add("sticky")
+            //     } else {
+            //         navbar.classList.remove("sticky");
+            //     }
+            // }
 
-            function removeTableBody(){
-                $('#myTableId tbody').empty();
-            }
+            // function removeTableBody(){
+            //     $('#myTableId tbody').empty();
+            // }
+        
+            function setSelectedRow(x) { }
         </script>
 
-
-        <script>
-            function setSelectedRow(x) {
-                // alert("Row index is: " + x.rowIndex);
-                // var n=document.getElementsByName("ind").value;
-                // alert("row x: " + n);
-            }
-        </script>
     </body>
 </html>
-
-<?php
-    // if(isset($_POST['createMember'])) // button name
-    // {      
-    //     echo "jees" . $_POST['ind'];
-    //     //echo callFunctions("fetchClubs", "list");
-    // } 
-?>

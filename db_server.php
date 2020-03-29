@@ -26,33 +26,11 @@ echo "</div>";
  // destroy the session;
  //session_destroy();
  
-//**************** */ end the session
-
 #region main
 function callFunctions($mode, $param)
 {
-    //log -start
-   
-    //Write action to txt log
-    // $log  = "User: ".$_SERVER['REMOTE_ADDR'].' - '.date("F j, Y, g:i a").PHP_EOL.
-    //         "Attempt: ".($result[0]['success']=='1'?'Success':'Failed').PHP_EOL.
-    //         "User: ".$username.PHP_EOL.
-    //         "-------------------------".PHP_EOL;
-    
-    // file_put_contents('./log_'.date("j.n.Y").'.txt', $log, FILE_APPEND);
-    //log -end
-    
     $local = ($_SERVER['REMOTE_ADDR']=='127.0.0.1' || $_SERVER['REMOTE_ADDR']=='::1');
-    
-    // 
-    // foreach ($_SERVER  as $k => $v)
-    // {
-    //     echo "key: $k, value: $v <br>";       
-    //     
-    // }
-    // 
-    // var_export ($_SERVER);
-   
+       
     try
     {
         if (!$local )
@@ -105,8 +83,8 @@ function callFunctions($mode, $param)
                 fetchMemberList($con, $param);
                 break;
 
-            case "fetchMembers":
-                fetchMembers($con);
+            case "fetchClubsAndMembers":
+                fetchClubsAndMembers($con);
                 break;
 
             case "fetchMemberById":              
@@ -128,8 +106,7 @@ function callFunctions($mode, $param)
             default:
                 log_writing("incorrect mode");
                 break;
-        }
-        // $logger->info('This is a log! ^_^ ');
+        }       
     }
     
     catch(Exception $e) {
@@ -150,6 +127,7 @@ function callFunctions($mode, $param)
 
 #region errors
 
+// log_writin
 function log_writing($msg) {       
     $date_utc = new \DateTime("now", new \DateTimeZone("UTC")); //UTC-time is used
      
@@ -226,21 +204,21 @@ function fetchClubById($con, $id)
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-   
-    $sql = "SELECT c.id, c.name, c.description, c.updated, c.updatedBy FROM club c where c.id = $id";
+
+    if (isset($id)) {
+        $sql = "SELECT c.id, c.name, c.description, c.updated, c.updatedBy FROM club c where c.id = $id";
  
-    $result = mysqli_query($con, $sql);
-
-    if ($result == false) {
-     
-        log_writing("fetchClubById: Error description: " . mysqli_error($con));
-        show_user_error("Virhe tietokantakäsittelyssä. Kokeile hetken kuluttua uudelleen.");
-    }
-
-    else
-    {        
-        if (mysqli_num_rows($result) > 0)
-        {
+        $result = mysqli_query($con, $sql);
+    
+        if ($result == false) {         
+            log_writing("fetchClubById: Error description: " . mysqli_error($con));
+            show_user_error("Virhe tietokantakäsittelyssä. Kokeile hetken kuluttua uudelleen.");
+        }
+    
+        else
+        {        
+            if (mysqli_num_rows($result) > 0)
+            {
                 //******also making session data ****//
         
                 while($row = mysqli_fetch_assoc($result)) 
@@ -260,11 +238,16 @@ function fetchClubById($con, $id)
                     session_start();              
                 }
                 $_SESSION['club_id'] = $clubid_session; // set session data
+            }
+            else
+            {
+                echo "Tietoja ei löydy";
+            }
         }
-        else
-        {
-            echo "Tietoja ei löydy";
-        }
+    }
+    else {
+        log_writing("fetchClubById: Error description: ClubId missing.");
+        show_user_error("Virhe tietokantakäsittelyssä. Kokeile hetken kuluttua uudelleen.");
     }
 }
 
@@ -303,15 +286,12 @@ function fetchClubNameById($con, $id)
                 session_start();              
             }
             $_SESSION['club_id'] = $clubid_session; // set session data
-          
         }
         else
         {
             echo "Tietoja ei löydy";
         }
     }
-    
-    
 }
 
 function fetchClubs( $con, $param)
@@ -372,7 +352,13 @@ function fetchClubs( $con, $param)
             }
              //*********** all or some *************/
             else {
-                $valitse = "Valitse urheiluseura";  
+                if ($param == "all") {
+                    $valitse = "Valitse kaikki";  
+                }
+                else {
+                    $valitse = "Valitse urheiluseura";  
+                }
+               
           
                 echo  "<select name=\"clubid\">";
                 if ($param == "all") {
@@ -492,7 +478,8 @@ function fetchMemberList( $con, $club_id)
     }
 }
 
-function fetchMembers( $con)
+// clubs and members
+function fetchClubsAndMembers( $con)
 {
     $nimi        = trim(strip_tags( $_POST['nimi'] ) );
     $nimi        = mysqli_real_escape_string($con, $nimi);
@@ -513,9 +500,9 @@ function fetchMembers( $con)
 
         }
         if ($nimi != "") {
-            $sql =  $sql . " AND (( m.firstname LIKE '%$nimi%') OR
-                              ( m.lastname LIKE '%$nimi%'))";   
-        }   
+            $sql =  $sql . " AND (( m.firstname LIKE '%$nimi%') OR ( m.lastname LIKE '%$nimi%'))";   
+        }  
+  
     }
     $sql =  $sql . " ORDER BY clubname, m.lastname, m.firstname";
     
@@ -525,7 +512,7 @@ function fetchMembers( $con)
     $result = mysqli_query($con, $sql);
 
     if ($result == false) {     
-        log_writing("fetchMembers: Error description: " . mysqli_error($con));
+        log_writing("fetchClubsAndMembers: Error description: " . mysqli_error($con));
         show_user_error("Virhe tietokantakäsittelyssä. Kokeile hetken kuluttua uudelleen.");
     }
     else {
@@ -548,66 +535,72 @@ function fetchMembers( $con)
         }
         else
         {
-            echo "<br>Tietoja ei löydy!";
+            echo "Tietoja ei löydy!";
         } 
     }
 }
 
 function fetchMemberById($con, $id) {
 
-    $sql =  
+    if (isset($id)) {
+        $sql =  
   
-    "SELECT c.name as clubname, m.id, m.firstname, m.lastname, m.description, m.updatedBy, m.updated " .
-    "from member m, club c";
-    $sql =  $sql . " WHERE m.id = " . $id . " and m.club_id = c.id";
-  
-    //  echo $sql ;
-    //  exit;
- 
-    $result = mysqli_query($con, $sql);
-
-    if ($result == false) {     
-        log_writing("fetchMemberById: Error description: " . mysqli_error($con));
-        show_user_error("Virhe tietokantakäsittelyssä. Kokeile hetken kuluttua uudelleen.");
+        "SELECT c.name as clubname, m.id, m.firstname, m.lastname, m.description, m.updatedBy, m.updated " .
+        "from member m, club c";
+        $sql =  $sql . " WHERE m.id = " . $id . " and m.club_id = c.id";
+      
+        //  echo $sql ;
+        //  exit;
+     
+        $result = mysqli_query($con, $sql);
+    
+        if ($result == false) {     
+            log_writing("fetchMemberById: Error description: " . mysqli_error($con));
+            show_user_error("Virhe tietokantakäsittelyssä. Kokeile hetken kuluttua uudelleen.");
+        }
+        else {
+         
+            if (mysqli_num_rows($result) > 0)
+            {
+                while($row = mysqli_fetch_assoc($result)) 
+                {
+                    $clubname = $row['clubname'];
+                    $lastname = $row['lastname'];
+                    $firstname = $row['firstname'];
+                    $description = $row['description'];
+                    $updatedBy = $row["updatedBy"]; 
+                    $updated = $row["updated"]; 
+                
+                    echo 
+                    
+                        "<label for  =\"clubname\" class=\"lbTitle\">Seura:</label>" .            
+                        $clubname . "<br>" .
+    
+                        "<label for  =\"firstname\" class=\"lbTitle\">Etunimi:</label>" .
+                        $firstname . "<br>" .
+    
+                        "<label for  =\"lastname\" class=\"lbTitle\">Sukunimi:</label>" .
+                        $lastname . "<br>" . 
+    
+                        "<label for  =\"description\" class=\"lbTitle\">Kuvaus:</label>" .
+                        $description . "<br>" . 
+    
+                        "<label for  =\"updatedBy\" class=\"lbTitle\">Päivittäjä:</label>" .
+                        $updatedBy . "<br>" .
+    
+                        "<label for  =\"updated\" class=\"lbTitle\">Päivitysaika:</label>" .
+                        $updated;
+                }     
+            }
+            else
+            {
+                echo "<br>Tietoja ei löydy!";
+            } 
+        }
     }
     else {
-     
-        if (mysqli_num_rows($result) > 0)
-        {
-            while($row = mysqli_fetch_assoc($result)) 
-            {
-                $clubname = $row['clubname'];
-                $lastname = $row['lastname'];
-                $firstname = $row['firstname'];
-                $description = $row['description'];
-                $updatedBy = $row["updatedBy"]; 
-                $updated = $row["updated"]; 
-            
-                echo 
-                
-                    "<label for  =\"clubname\" class=\"lbTitle\">Seura:</label>" .            
-                    $clubname . "<br>" .
-
-                    "<label for  =\"firstname\" class=\"lbTitle\">Etunimi:</label>" .
-                    $firstname . "<br>" .
-
-                    "<label for  =\"lastname\" class=\"lbTitle\">Sukunimi:</label>" .
-                    $lastname . "<br>" . 
-
-                    "<label for  =\"description\" class=\"lbTitle\">Kuvaus:</label>" .
-                    $description . "<br>" . 
-
-                    "<label for  =\"updatedBy\" class=\"lbTitle\">Päivittäjä:</label>" .
-                    $updatedBy . "<br>" .
-
-                    "<label for  =\"updated\" class=\"lbTitle\">Päivitysaika:</label>" .
-                    $updated;
-            }     
-        }
-        else
-        {
-            echo "<br>Tietoja ei löydy!";
-        } 
+        log_writing("fetchMemberById: Error description: memberid missing");
+        show_user_error("Virhe tietokantakäsittelyssä. Kokeile hetken kuluttua uudelleen.");
     }
 }
 
@@ -683,7 +676,7 @@ function deleteMember($con, $id)
         if (mysqli_query($con, $sql))
         {
             if (mysqli_affected_rows($con) == 1) {
-                echo "Jäsentieto poistettu!";
+                echo "Jäsentieto poistettu!<br>";
             }
             else {
                 log_writing("deleteMember: Error description: not finding anything to delete");
@@ -710,8 +703,8 @@ function deleteMember($con, $id)
 ?>
 
 <script>
-    // When the user scrolls the page, execute myFunction
-    window.onscroll = function() {myFunction()};
+    // When the user scrolls the page, execute pageScrolling
+    window.onscroll = function() {pageScrolling()};
 
     // Get the navbar
     var navbar = document.getElementById("navbar");
@@ -720,7 +713,7 @@ function deleteMember($con, $id)
     var sticky = navbar.offsetTop;
 
     // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-    function myFunction()
+    function pageScrolling()
     {
         if (window.pageYOffset >= sticky) {
             navbar.classList.add("sticky")

@@ -5,21 +5,16 @@ html{
 
 #lomake {
     max-width:600px;
-   
-    
 } 
+
 fieldset {
-    /* background-color: gainsboro; */
     background-color: lightblue;
     padding-top: 20px;    
-    padding-bottom: 20px;
-       
+    padding-bottom: 20px;       
 }
 
 legend {
     font-size: xx-large;
-    
-
 }
 
 table {
@@ -34,10 +29,9 @@ th, td {
     padding: 8px;
     padding-left: 1px;
 }
+
 tr:nth-child(even) {
-    /* background-color: #dddddd; */
     background-color: lightblue;
-   
 }
 
 table, th, td {
@@ -52,7 +46,6 @@ select {
 }
 
 /* classes */
-
 
 .lbTitle {
     width:150px;
@@ -89,20 +82,13 @@ textarea{
 
 }
 
-/* #bSearch {
-    margin-left: 10px;
-    
-} */
-
 #inputName{
     margin-right: 10px;
 }
 
-
 /* Style the navbar */
 #navbar {
   overflow: hidden;
-  /* background-color: mediumblue; */
   background-color: mintcream;}
 
 /* Navbar links */
@@ -135,15 +121,3 @@ textarea{
 .sticky + .content {
   padding-top: 60px;
 }
-
-/* #userData {
-    padding-left:800px;
-    padding-right:10;
-} */
-
-/* #usertxt2 { */
-    /* padding-left:800px; */
-    /* padding-right:10; */
-    /* margin-left: 10px; */
-    
-/* } */

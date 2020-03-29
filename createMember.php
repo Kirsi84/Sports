@@ -1,19 +1,10 @@
 <?php
-   
-    require('db_server.php'); // here
-    //$_POST['virheet']['kuvaus'] = "Kuvaus on jo olemassa";
-
-
-    // $ind = $_GET['ind'];
-
-    // echo "indeksi: " . $ind;
-    // callFunctions("fetchClubById", $ind); //this is index of the table, not identifi
+    require('db_server.php'); 
 ?>
 
 <!DOCTYPE html>
-<!--
 
--->
+<!-- Create Member -->
 
 <html>
     <head>
@@ -29,7 +20,6 @@
     <body>
 
         <br>
-     
        
         <form action="createMember.php" method="post" id="lomake"> 
 
@@ -60,12 +50,7 @@
 
                 <label for  ="description" class="lbTitle">Kuvaus:</label>
                 <textarea id="description" name="description" rows="4" cols="54"></textarea>
-             
-                <!-- <label for  ="club" class="lbTitle">Seura:</label> -->
-                <?php 
-                   // callFunctions("fetchClubs", "some");                   
-                ?>
-                
+                                             
                 <br><br>
                 <label for  ="button" class="lbTitle"></label>
                 <input type="submit" name="button"  class="sButton" value="Tallenna"> 
@@ -73,6 +58,7 @@
            </fieldset>
            
            <br>
+           <br><a href="index.php">Paluu</a>
            
        </form>
       
