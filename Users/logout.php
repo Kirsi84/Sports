@@ -4,8 +4,8 @@
 require_once('bookmark_fns.php');
 session_start();
 
-//KIR 20200329
-$old_user = "";
+//KIR  20200329
+$old_user = ""; 
 if (isset($_SESSION['valid_user'])) { 
     $old_user = $_SESSION['valid_user'];
 }
@@ -15,7 +15,6 @@ unset($_SESSION['valid_user']);
 
 // remove all session variables KIR 20200329
 session_unset();
-//echo "session_unset tehty"; KIR
 
 $result_dest = session_destroy();
 
