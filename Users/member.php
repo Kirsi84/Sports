@@ -37,7 +37,7 @@ if ($username && $passwd) {
 }
 
 
-header("Location: /sports/index.php"); //KIR
+header("Location: /index.php"); //KIR
 
 // do_html_header('Home');
 // check_valid_user();

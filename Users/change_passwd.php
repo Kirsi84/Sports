@@ -31,7 +31,7 @@
   catch (Exception $e) {
     echo $e->getMessage();
   }
-  header("Location: /sports/index.php"); //KIR
+  header("Location: /index.php"); //KIR
   // display_user_menu(); KIR
   // do_html_footer(); KIR
 ?>

@@ -21,7 +21,7 @@ function do_html_header($title) {
   <div>
 
   
-    <img src="\sports\images\football.png" alt="Football logo" height="55" width="57" style="float: left; padding-right: 6px;" />
+    <img src="\images\football.png" alt="Football logo" height="55" width="57" style="float: left; padding-right: 6px;" />
       <!-- <h1>PHPbookmark</h1> -->
       <h1>Sports</h1>
   </div>
@@ -69,7 +69,7 @@ function display_login_form() {
 ?>
   <p><a href="register_form.php">Not a member?</a></p>
   <form method="post" action="member.php"> 
-  <!-- <form method="post" action="/sports/index.php"> KIR-->
+  <!-- <form method="post" action="/index.php"> KIR-->
   <div class="formblock">
     <h2>Members Log In Here</h2>
 
@@ -161,13 +161,13 @@ function display_user_menu() {
   // display the menu options on this page
 ?>
 <hr>
-<!-- <a href="/sports/index.php">Home</a> &nbsp;|&nbsp; KIR -->
+<!-- <a href="/index.php">Home</a> &nbsp;|&nbsp; KIR -->
 <a href="member.php">Home</a> &nbsp;|&nbsp; 
 
 
 <!-- <a href="add_bm_form.php">Add BM</a> &nbsp;|&nbsp; KIR -->
 
-<a href="/sports/index.php">Seurat</a> &nbsp;|&nbsp; 
+<a href="/index.php">Seurat</a> &nbsp;|&nbsp; 
 
 <?php //KIR removed code
   // only offer the delete option if bookmark table is on this page

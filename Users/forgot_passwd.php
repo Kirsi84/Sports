@@ -13,7 +13,7 @@
   catch (Exception $e) {
     //echo 'Your password could not be reset - please try again later.';
     $Message = "Toiminto ei ole käytössä!"; //KIR
-    header("Location: /sports/error.php?Message=".$Message);
+    header("Location: /error.php?Message=".$Message);
   }
   do_html_url('login.php', 'Login');
   do_html_footer();

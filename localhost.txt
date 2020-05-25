@@ -1,1 +1,13 @@
-http://localhost/sports/users/login.php
+Toimii hakemistorakenteella: htdocs\sports:
+
+http://localhost/images/football.png
+
+http://localhost/users/login.php
+
+xamp:ssa
+=====
+
+#DocumentRoot "C:/xampp/htdocs"
+#<Directory "C:/xampp/htdocs">
+DocumentRoot "C:/xampp/htdocs/sports"
+<Directory "C:/xampp/htdocs/sports">

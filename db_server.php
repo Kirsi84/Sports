@@ -1,5 +1,7 @@
 <?php
 
+require 'dbcon-prod.php';
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -9,7 +11,7 @@ $usertxt = check_valid_user();
 
 echo "<div id=\"navbar\">";
    
-    echo "<a href=\"index.php\"><img src=\"\sports\\images\\football.png\" alt=\"Football\" weight=\"19\" height=\"19\"</a>\n"; 
+    echo "<a href=\"index.php\"><img src=\"\images\\football.png\" alt=\"Football\" weight=\"19\" height=\"19\"</a>\n"; 
     echo "<a href=\"createClub.php\">Lisää seura</a>\n";
     echo "<a href=\"members.php\">Seurojen jäsentiedot</a>\n";
    
@@ -35,13 +37,13 @@ function callFunctions($mode, $param)
     {
         if (!$local )
         {
-            $palvelin   = "127.0.0.1:53181";
-            $kayttaja   = "azure";  // tämä on tietokannan käyttäjä, ei tekemäsi järjestelmän
-            $salasana   = "6#vWHD_$";
+            $palvelin = $prod_palvelin;
+            $kayttaja = $prod_kayttaja;
+            $salasana = $prod_salasana;
+    
             $tietokanta = "sports";
-
-            // Turn off all error reporting
-           // error_reporting(0); // in production not showing 
+            // Turn off all error reporting inproduction
+            error_reporting(0); // in production not showing 
         }
         else {
             $palvelin   = "localhost";

@@ -42,7 +42,7 @@
 
     // provide link to members page
     //$Message = urlencode("Rekisteröinti onnistui."); //KIR
-    header("Location: /sports/index.php"); //KIR
+    header("Location: /index.php"); //KIR
 
   //   do_html_header('Registration successful');
   //   echo 'Your registration was successful.  Go to the members page to start setting up your bookmarks!';
